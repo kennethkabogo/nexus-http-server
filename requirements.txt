@@ -1,0 +1,4 @@
+bleach==6.1.0
+Cerberus==1.3.5
+PyJWT==2.8.0
+requests==2.31.0
