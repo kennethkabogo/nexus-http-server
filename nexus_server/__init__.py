@@ -21,7 +21,8 @@ __url__ = "https://github.com/kennethkabogo/nexus-http-server"
 
 # Import main components for easy access
 from .server import create_app, route, middleware
-from .utils import json_response, redirect, validate_json
+from .utils.responses import json_response, redirect
+from .utils.validation import validate_json
 
 __all__ = [
     "create_app",
