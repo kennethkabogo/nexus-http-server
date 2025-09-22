@@ -2,11 +2,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/)
-[![Build Status](https://github.com/your-username/nexus-http-server/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/your-username/nexus-http-server/actions)
-[![codecov](https://codecov.io/gh/your-username/nexus-http-server/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/nexus-http-server)
+[![Build Status](https://github.com/kennethkabogo/nexus-http-server/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/kennethkabogo/nexus-http-server/actions)
+[![codecov](https://codecov.io/gh/kennethkabogo/nexus-http-server/branch/main/graph/badge.svg)](https://codecov.io/gh/kennethkabogo/nexus-http-server)
 [![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](docs/)
 
-A lightweight, security-focused HTTP server built with Python, designed to serve modern web applications with a React frontend. Nexus provides a production-ready foundation with built-in cybersecurity and data privacy features.
+Nexus HTTP Server: A lightweight, security-focused Python HTTP server with integrated React frontend. Built with cybersecurity best practices including JWT authentication, rate limiting, input sanitization, and intrusion detection.
 
 ## Why Nexus?
 
@@ -82,7 +82,7 @@ nexus-server
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/nexus-http-server.git
+    git clone https://github.com/kennethkabogo/nexus-http-server.git
     cd nexus-http-server
     ```
 

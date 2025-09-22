@@ -1,16 +1,16 @@
-# Makefile for Gemini HTTP Server
+# Makefile for Nexus HTTP Server
 
 # Variables
 PYTHON := python3
 PIP := pip3
 TEST_DIR := tests
-SRC_DIR := gemini_server
+SRC_DIR := nexus_server
 REQ_FILE := requirements.txt
 
 # Help target
 .PHONY: help
 help:
-	@echo "Gemini HTTP Server - Development Commands"
+	@echo "Nexus HTTP Server - Development Commands"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make install     - Install dependencies"
@@ -18,6 +18,7 @@ help:
 	@echo "  make test        - Run tests"
 	@echo "  make coverage    - Run tests with coverage"
 	@echo "  make lint        - Run code linting"
+	@echo "  make security    - Run security vulnerability scan"
 	@echo "  make clean       - Clean build artifacts"
 	@echo "  make build       - Build package"
 	@echo "  make docs        - Generate documentation"
@@ -28,7 +29,7 @@ help:
 .PHONY: install
 install:
 	$(PIP) install -r $(REQ_FILE)
-	$(PIP) install pytest pytest-cov flake8 pylint
+	$(PIP) install pytest pytest-cov flake8 pylint safety bandit
 
 # Run development server
 .PHONY: dev
@@ -50,6 +51,11 @@ coverage:
 lint:
 	flake8 $(SRC_DIR)/ $(TEST_DIR)/
 	pylint $(SRC_DIR)/
+
+# Run security vulnerability scan
+.PHONY: security
+security:
+	$(PYTHON) security_scan.py
 
 # Clean build artifacts
 .PHONY: clean
@@ -94,6 +100,6 @@ security-test:
 
 # Run all tests including security tests
 .PHONY: all-tests
-all-tests: test security-test
+all-tests: test security-test security
 
 .DEFAULT_GOAL := help

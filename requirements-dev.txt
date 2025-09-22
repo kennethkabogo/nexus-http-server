@@ -1,0 +1,17 @@
+# Development dependencies for Nexus HTTP Server
+
+# Testing
+pytest>=6.2.5
+pytest-cov>=2.12.1
+
+# Code quality
+flake8>=3.9.2
+pylint>=2.11.1
+
+# Security scanning
+safety>=1.10.3
+bandit>=1.7.0
+
+# Documentation
+mkdocs>=1.2.2
+mkdocs-material>=7.2.6
