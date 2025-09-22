@@ -165,7 +165,7 @@ def create_app(routes_dict, middlewares_list):
         logging.info("Request Path: %s", request.path)
         logging.info("Request Query Params: %s", sanitize_for_logging(request.query_params))
         logging.info("Request Data: %s", sanitize_for_logging(request.data))
-        logging.info("Request Headers:\n%s", sanitize_for_logging(request.headers))
+        logging.info("Request Headers: %s", sanitize_for_logging(request.headers))
         logging.info("Routes: %s", routes_dict)
 
         def handle_request(request):
@@ -220,11 +220,6 @@ def setup_routes():
     """Setup all application routes"""
     # Import route handlers
     from .api import get_users, get_routes, get_stats, get_logs, echo_data, login
-    
-    # Import and add security routes
-    from .security import add_encryption_routes, add_differential_privacy_routes
-    add_encryption_routes()
-    add_differential_privacy_routes()
     
     @route('/api/users')
     @require_auth  # Protect this endpoint

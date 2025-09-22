@@ -14,7 +14,9 @@ from nexus_server.server import (
     Request, Response, routes, setup_routes
 )
 from nexus_server.security.utils import (
-    sanitize_recursive, sanitize_for_logging, is_suspicious,
+    sanitize_recursive, sanitize_for_logging, is_suspicious
+)
+from nexus_server.security.tokens import (
     generate_secure_token, generate_correlation_id
 )
 from nexus_server.utils.validation import validate_json

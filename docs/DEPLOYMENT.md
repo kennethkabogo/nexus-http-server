@@ -112,6 +112,39 @@ For applications that perform statistical analysis, the server provides differen
 
 These endpoints add calibrated noise to protect individual privacy while preserving statistical accuracy.
 
+### Zero-Knowledge Architecture
+
+The server supports zero-knowledge encryption where the server never sees plaintext data or encryption keys:
+
+- `/api/zk/generate-key` - Generate client-side encryption keys
+- `/api/zk/prepare-storage` - Prepare data for zero-knowledge storage
+- `/api/zk/retrieve-storage` - Retrieve and decrypt data from storage
+
+### Privacy Budget Management
+
+For applications that perform multiple differential privacy queries, the server provides privacy budget management:
+
+- `/api/privacy/budget` - Get current privacy budget status
+- `/api/privacy/budget/consume` - Manually consume privacy budget
+- `/api/privacy/budget/reset` - Reset privacy budget
+
+### Data Expiration and Self-Destruction
+
+For applications that handle sensitive temporary data, the server provides automatic data expiration:
+
+- `/api/data/expiration` - Get information about expiring data
+- `/api/data/expiration/<data_id>/extend` - Extend data expiration
+- `/api/data/expiration/<data_id>/cancel` - Cancel data expiration
+
+### Federated Learning
+
+For applications that need privacy-preserving machine learning, the server provides federated learning capabilities:
+
+- `/api/fl/initialize` - Initialize global model structure
+- `/api/fl/start-round` - Start a new federated learning round
+- `/api/fl/submit-update` - Submit client model updates
+- `/api/fl/aggregate` - Aggregate client updates to improve global model
+
 ## Scaling Considerations
 
 For high-traffic applications, consider:
@@ -122,3 +155,6 @@ For high-traffic applications, consider:
 4. Implementing database persistence
 5. Setting up automated backups
 6. Configuring proper rate limiting for privacy-preserving endpoints
+7. Monitoring privacy budget consumption in high-usage applications
+8. Implementing data expiration policies for sensitive data
+9. Using distributed systems for federated learning coordination in large deployments

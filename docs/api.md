@@ -198,31 +198,526 @@ Get a differentially private mean of values.
 }
 ```
 
-### API Key Management
+### Decentralized Identity Endpoints
 
-#### POST /api/admin/api-keys
-Manage API keys (requires admin authentication).
+#### GET /api/did/generate
+Generate a new DID key pair for self-sovereign identity.
+
+**Response:**
+```json
+{
+  "message": "string",
+  "did": "string",
+  "public_key": "string",
+  "instructions": "string"
+}
+```
+
+#### POST /api/did/document
+Create a DID document.
 
 **Request Body:**
 ```json
 {
-  "action": "string" // "create" or "revoke"
-  // For revoke action:
-  // "api_key": "string"
+  "did": "string",
+  "public_key": "string"
 }
 ```
 
-**Response (create):**
+**Response:**
 ```json
 {
-  "api_key": "string"
+  "message": "string",
+  "did_document": "object"
 }
 ```
 
-**Response (revoke):**
+#### POST /api/did/credential/issue
+Issue a verifiable credential.
+
+**Request Body:**
 ```json
 {
-  "message": "string"
+  "issuer_did": "string",
+  "subject_did": "string",
+  "claims": "object",
+  "expiration_days": "integer"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "credential": "object"
+}
+```
+
+#### POST /api/did/credential/verify
+Verify a verifiable credential.
+
+**Request Body:**
+```json
+{
+  "credential": "object"
+}
+```
+
+**Response:**
+```json
+{
+  "verification_result": "object"
+}
+```
+
+#### GET /api/did/document/<did>
+Get a DID document.
+
+**Response:**
+```json
+{
+  "did_document": "object"
+}
+```
+
+### Homomorphic Encryption Endpoints
+
+#### GET /api/he/generate-keys
+Generate homomorphic encryption keys.
+
+**Response:**
+```json
+{
+  "message": "string",
+  "public_key": "string",
+  "instructions": "string"
+}
+```
+
+#### POST /api/he/encrypt/int
+Encrypt an integer value.
+
+**Request Body:**
+```json
+{
+  "value": "integer",
+  "public_key": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "encrypted_value": "object"
+}
+```
+
+#### POST /api/he/encrypt/float
+Encrypt a float value.
+
+**Request Body:**
+```json
+{
+  "value": "float",
+  "public_key": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "encrypted_value": "object"
+}
+```
+
+#### POST /api/he/decrypt
+Decrypt a homomorphically encrypted value.
+
+**Request Body:**
+```json
+{
+  "encrypted_value": "object",
+  "private_key": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "decrypted_value": "number"
+}
+```
+
+#### POST /api/he/add
+Perform homomorphic addition on two encrypted values.
+
+**Request Body:**
+```json
+{
+  "encrypted_a": "object",
+  "encrypted_b": "object"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "result": "object"
+}
+```
+
+#### POST /api/he/multiply
+Perform homomorphic multiplication of an encrypted value by a scalar.
+
+**Request Body:**
+```json
+{
+  "encrypted_value": "object",
+  "scalar": "number"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "result": "object"
+}
+```
+
+### AI Privacy Endpoints
+
+#### POST /api/ai/opt-out
+Set AI training data opt-out preference.
+
+**Request Body:**
+```json
+{
+  "opt_out": "boolean"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "opt_out": "boolean",
+  "timestamp": "number"
+}
+```
+
+#### GET /api/ai/opt-out/status
+Get AI training data opt-out status.
+
+**Response:**
+```json
+{
+  "user_id": "string",
+  "opt_out": "boolean",
+  "set_at": "number",
+  "status": "string"
+}
+```
+
+#### POST /api/ai/training-job
+Start an AI model training job with privacy controls.
+
+**Request Body:**
+```json
+{
+  "job_id": "string",
+  "model_type": "string",
+  "data_sources": "array"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "job_info": "object"
+}
+```
+
+#### GET /api/ai/training-jobs
+Get information about all AI training jobs.
+
+**Response:**
+```json
+{
+  "training_jobs": "object"
+}
+```
+
+#### GET /api/ai/privacy-report
+Get AI privacy report for the authenticated user.
+
+**Response:**
+```json
+{
+  "user_id": "string",
+  "opt_out_status": "object",
+  "ai_interactions": "object",
+  "protection_status": "string",
+  "report_generated_at": "number"
+}
+```
+
+### Privacy Budget Management Endpoints
+
+#### GET /api/privacy/budget
+Get current privacy budget status for the authenticated user.
+
+**Response:**
+```json
+{
+  "total_epsilon": "number",
+  "consumed_epsilon": "number",
+  "remaining_epsilon": "number",
+  "usage_percentage": "number",
+  "queries": "array",
+  "created_at": "timestamp"
+}
+```
+
+#### GET /api/privacy/budget/history
+Get privacy budget usage history for the authenticated user.
+
+**Response:**
+```json
+{
+  "history": "array"
+}
+```
+
+#### POST /api/privacy/budget/suggest
+Get suggestions for epsilon values based on remaining budget.
+
+**Request Body:**
+```json
+{
+  "sensitivity": "number" // Optional, default: 1.0
+}
+```
+
+**Response:**
+```json
+{
+  "suggestions": {
+    "conservative": "number",
+    "moderate": "number",
+    "liberal": "number"
+  },
+  "remaining_budget": "number",
+  "explanation": "string"
+}
+```
+
+#### POST /api/privacy/budget/reset
+Reset privacy budget for the authenticated user.
+
+**Response:**
+```json
+{
+  "message": "string",
+  "status": "string"
+}
+```
+
+#### POST /api/privacy/budget/consume
+Manually consume a portion of the privacy budget.
+
+**Request Body:**
+```json
+{
+  "epsilon": "number",
+  "query_type": "string"
+}
+```
+
+**Response (success):**
+```json
+{
+  "message": "string",
+  "remaining_budget": "number",
+  "status": "string"
+}
+```
+
+**Response (insufficient budget):**
+```json
+{
+  "error": "string",
+  "requested": "number",
+  "available": "number",
+  "total": "number"
+}
+```
+
+### Data Expiration Endpoints
+
+#### GET /api/data/expiration
+Get information about all expiring data items.
+
+**Response:**
+```json
+{
+  "expiring_data": "object"
+}
+```
+
+#### GET /api/data/expiration/<data_id>
+Get expiration information for a specific data item.
+
+**Response:**
+```json
+{
+  "created_at": "timestamp",
+  "expires_at": "timestamp",
+  "ttl_seconds": "number",
+  "time_remaining": "number",
+  "is_expired": "boolean"
+}
+```
+
+#### POST /api/data/expiration/<data_id>/cancel
+Cancel expiration for a data item.
+
+**Response:**
+```json
+{
+  "message": "string",
+  "status": "string"
+}
+```
+
+#### POST /api/data/expiration/<data_id>/extend
+Extend expiration time for a data item.
+
+**Request Body:**
+```json
+{
+  "additional_seconds": "integer"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "expiration_info": "object",
+  "status": "string"
+}
+```
+
+### Federated Learning Endpoints
+
+#### POST /api/fl/initialize
+Initialize the global federated learning model.
+
+**Request Body:**
+```json
+{
+  "model_structure": "object"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "model_structure": "object"
+}
+```
+
+#### POST /api/fl/start-round
+Start a new federated learning round.
+
+**Request Body:**
+```json
+{
+  "round_id": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "round_info": "object"
+}
+```
+
+#### POST /api/fl/submit-update
+Submit a client's model update for a training round.
+
+**Request Body:**
+```json
+{
+  "client_id": "string",
+  "round_id": "string",
+  "model_update": "object"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "client_id": "string",
+  "round_id": "string"
+}
+```
+
+#### POST /api/fl/aggregate
+Aggregate client updates to improve the global model.
+
+**Request Body:**
+```json
+{
+  "round_id": "string",
+  "aggregation_method": "string" // Optional, default: "fedavg"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "string",
+  "updated_model": "object",
+  "aggregation_method": "string"
+}
+```
+
+#### POST /api/fl/round-status
+Get the status of a federated learning round.
+
+**Request Body:**
+```json
+{
+  "round_id": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "round_id": "string",
+  "status": "object"
+}
+```
+
+#### GET /api/fl/client-stats
+Get statistics about client participation.
+
+**Response:**
+```json
+{
+  "client_statistics": "object"
 }
 ```
 
@@ -239,10 +734,10 @@ Common HTTP status codes:
 - 200: Success
 - 400: Bad Request
 - 401: Unauthorized
-- 403: Forbidden
-- 404: Not Found
-- 429: Too Many Requests
-- 500: Internal Server Error
+ - 403: Forbidden
+ - 404: Not Found
+ - 429: Too Many Requests
+ - 500: Internal Server Error
 
 ## Rate Limiting
 

@@ -13,7 +13,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from .server import create_app, setup_routes
 from .middleware import (
     error_middleware, authentication_middleware, security_headers_middleware,
-    rate_limit_middleware, security_monitoring_middleware
+    rate_limit_middleware, security_monitoring_middleware, simple_middleware
+)
+from .security import (
+    add_encryption_routes, add_differential_privacy_routes, add_zero_knowledge_routes,
+    add_privacy_budget_routes, add_data_expiration_routes, add_federated_learning_routes,
+    add_decentralized_identity_routes, add_homomorphic_encryption_routes, add_ai_privacy_routes,
+    add_ai_privacy_middleware
 )
 
 # Setup logging
@@ -29,6 +35,17 @@ def main():
     # Setup routes
     setup_routes()
     
+    # Add security routes
+    add_encryption_routes()
+    add_differential_privacy_routes()
+    add_zero_knowledge_routes()
+    add_privacy_budget_routes()
+    add_data_expiration_routes()
+    add_federated_learning_routes()
+    add_decentralized_identity_routes()
+    add_homomorphic_encryption_routes()
+    add_ai_privacy_routes()
+    
     # Setup middleware chain
     # The error middleware should be the first one to catch all errors
     all_middlewares = [
@@ -37,6 +54,8 @@ def main():
         security_headers_middleware,
         rate_limit_middleware,
         security_monitoring_middleware,
+        add_ai_privacy_middleware,  # Add AI privacy middleware
+        simple_middleware,
     ]
     
     # Import routes from server
