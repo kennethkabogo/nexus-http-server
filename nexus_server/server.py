@@ -221,6 +221,11 @@ def setup_routes():
     # Import route handlers
     from .api import get_users, get_routes, get_stats, get_logs, echo_data, login
     
+    # Import and add security routes
+    from .security import add_encryption_routes, add_differential_privacy_routes
+    add_encryption_routes()
+    add_differential_privacy_routes()
+    
     @route('/api/users')
     @require_auth  # Protect this endpoint
     def users_handler(request):

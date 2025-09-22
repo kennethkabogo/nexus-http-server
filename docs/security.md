@@ -1,127 +1,204 @@
 # Nexus HTTP Server Security Documentation
 
+This document provides detailed information about the security and privacy features implemented in the Nexus HTTP Server, with a particular focus on the privacy-preserving capabilities.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Encryption Features](#encryption-features)
+3. [Differential Privacy Features](#differential-privacy-features)
+4. [Traditional Security Features](#traditional-security-features)
+5. [API Endpoints](#api-endpoints)
+6. [Best Practices](#best-practices)
+
 ## Overview
 
-The Nexus HTTP Server includes multiple built-in security features designed to protect against common web application vulnerabilities. This document explains these features and how to configure them.
+Nexus HTTP Server implements cutting-edge privacy-preserving technologies alongside traditional security measures to protect both data in transit and at rest. The server incorporates:
 
-## Security Features
+- End-to-end encryption for sensitive data
+- Differential privacy for statistical analysis
+- Traditional security measures like JWT authentication and rate limiting
 
-### 1. Authentication
+## Encryption Features
 
-The server supports two authentication methods:
+### End-to-End Encryption
 
-1. **JWT Token Authentication**: Secure token-based authentication for API endpoints
-2. **API Key Authentication**: Alternative authentication method for machine-to-machine communication
+The server implements robust end-to-end encryption using industry-standard cryptographic algorithms:
 
-### 2. Input Sanitization
+- **PBKDF2** for key derivation from passwords
+- **AES-256** via **Fernet** for symmetric encryption
+- **Base64** encoding for safe transmission
 
-All user inputs are automatically sanitized to prevent:
-- Cross-Site Scripting (XSS) attacks
-- SQL injection attacks
-- Path traversal attacks
-- Other injection vulnerabilities
+#### Key Features:
 
-### 3. Rate Limiting
+1. **Password-Based Key Derivation**: Uses PBKDF2 with 100,000 iterations to derive strong cryptographic keys from user passwords
+2. **Salt Generation**: Automatically generates unique 16-byte salts for each encryption operation to prevent rainbow table attacks
+3. **Symmetric Encryption**: Uses Fernet (AES 128 in CBC mode with HMAC for authentication)
+4. **Safe Encoding**: Base64 encodes encrypted data and salts for safe JSON transmission
 
-IP and user-based rate limiting prevents abuse:
-- 1000 requests per hour per IP address
-- 1000 requests per hour per authenticated user
+#### Usage Example:
 
-### 4. Security Headers
+```bash
+# Encrypt data
+curl -X POST http://localhost:8000/api/encrypt \
+  -H "Content-Type: application/json" \
+  -d '{"data": "Secret Message", "password": "strongpassword123"}'
 
-The server automatically adds security headers to all responses:
+# Decrypt data
+curl -X POST http://localhost:8000/api/decrypt \
+  -H "Content-Type: application/json" \
+  -d '{
+    "encrypted_data": "eyJkYXRhIjogIk15IGVuY3J5cHRlZCBkYXRhIiwgInNhbHQiOiAiTVdVek1EST0ifQ==", 
+    "salt": "TVdVek1EST0=", 
+    "password": "strongpassword123"
+  }'
+```
+
+## Differential Privacy Features
+
+Differential privacy is a mathematical framework that provides strong privacy guarantees for statistical analysis. The server implements:
+
+### Laplace Mechanism
+
+The core of differential privacy in Nexus is the Laplace mechanism, which adds calibrated noise to statistical queries.
+
+#### Key Concepts:
+
+1. **ε (Epsilon)**: Privacy budget parameter
+   - Smaller ε = stronger privacy, more noise
+   - Larger ε = weaker privacy, less noise
+   - Typical values: 0.01-10.0
+
+2. **Sensitivity**: Maximum change in query output when one record is added/removed
+   - For counting queries: 1
+   - For sum queries: Depends on data range
+
+3. **Noise Scale**: Determined by sensitivity/ε
+
+#### Implemented Algorithms:
+
+1. **DP Count**: Differentially private count of records
+2. **DP Mean**: Differentially private mean calculation with ε budget splitting
+
+#### Usage Example:
+
+```bash
+# Differentially private count
+curl -X POST http://localhost:8000/api/dp/count \
+  -H "Content-Type: application/json" \
+  -d '{
+    "values": [1, 2, 3, 4, 5], 
+    "epsilon": 1.0
+  }'
+
+# Differentially private mean
+curl -X POST http://localhost:8000/api/dp/mean \
+  -H "Content-Type: application/json" \
+  -d '{
+    "values": [10, 20, 30, 40, 50], 
+    "epsilon": 1.0
+  }'
+```
+
+## Traditional Security Features
+
+### Authentication and Authorization
+
+- **JWT Authentication**: Secure token-based authentication
+- **Role-Based Access Control**: Fine-grained access control
+- **Session Management**: Secure session handling
+
+### Input Sanitization and Validation
+
+- **Recursive Sanitization**: Cleans all user inputs to prevent XSS, SQLi, and path traversal
+- **Schema Validation**: Validates JSON request bodies against defined schemas
+- **Content-Type Checking**: Validates content types for proper handling
+
+### Rate Limiting
+
+- **IP-Based Rate Limiting**: Prevents abuse from single sources
+- **User-Based Rate Limiting**: Applies limits to authenticated users
+- **Adaptive Throttling**: Adjusts limits based on server load
+
+### Security Headers
+
+Automatically adds crucial HTTP security headers:
 - `X-Content-Type-Options: nosniff`
 - `X-Frame-Options: DENY`
 - `X-XSS-Protection: 1; mode=block`
 - `Referrer-Policy: no-referrer-when-downgrade`
-- `Content-Security-Policy`
-- And more...
+- Configurable `Content-Security-Policy`
 
-### 5. Intrusion Detection
+### Intrusion Detection
 
-Pattern matching detects and blocks common attack vectors:
-- XSS patterns
-- SQL injection patterns
-- Directory traversal attempts
-- Code injection attempts
+- **Pattern Matching**: Detects common attack patterns
+- **Suspicious Activity Logging**: Logs potential security incidents
+- **Real-Time Blocking**: Blocks detected threats
 
-### 6. PII Redaction
+### Logging and Auditing
 
-Personally Identifiable Information (PII) is automatically redacted from logs:
-- Social Security Numbers
-- Email addresses
-- And other sensitive data patterns
+- **Separate Security Logs**: Dedicated `security.log` for security events
+- **PII Redaction**: Automatically removes sensitive information from logs
+- **Comprehensive Audit Trail**: Tracks all server activities
 
-### 7. Security Logging
+## API Endpoints
 
-Dedicated security event logging to `security.log` for monitoring and auditing.
+### Encryption Endpoints
 
-## Configuration
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/encrypt` | POST | Encrypts data with end-to-end encryption |
+| `/api/decrypt` | POST | Decrypts data with end-to-end encryption |
 
-### Environment Variables
+### Differential Privacy Endpoints
 
-- `NEXUS_API_KEYS`: Comma-separated list of valid API keys
-- `DEV_MODE`: Set to `False` for production deployments
-- `SECRET_KEY`: JWT secret key (auto-generated if not set)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/dp/count` | POST | Provides differentially private count |
+| `/api/dp/mean` | POST | Provides differentially private mean |
 
-### Security Settings
+### Authentication Endpoints
 
-In `nexus_server/config.py`:
-```python
-DEV_MODE = False  # Set to False for production
-MAX_REQUEST_SIZE = 1024 * 1024  # 1MB limit
-```
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/login` | POST | JWT authentication endpoint |
+| `/api/users` | GET | Protected user data endpoint |
+
+### Utility Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/routes` | GET | Lists all registered API routes |
+| `/api/stats` | GET | Provides server statistics |
+| `/api/logs` | GET | Accesses server logs (dev mode only) |
+| `/api/echo` | POST | Echoes validated JSON payload |
 
 ## Best Practices
 
-### 1. Production Deployment
+### For Application Developers
 
-1. Set `DEV_MODE = False` in configuration
-2. Use a strong, randomly generated `SECRET_KEY`
-3. Configure proper SSL/TLS for HTTPS
-4. Regularly update dependencies
-5. Run security scans using `make security`
+1. **Always Use HTTPS**: Ensure all communications are encrypted in transit
+2. **Strong Password Policies**: Encourage users to use strong passwords for encryption
+3. **Appropriate Epsilon Values**: Choose epsilon values based on privacy requirements
+4. **Input Validation**: Always validate inputs before processing
+5. **Regular Updates**: Keep the server updated with security patches
 
-### 2. API Key Management
+### For Data Protection
 
-1. Generate strong, random API keys
-2. Store API keys securely (environment variables, not in code)
-3. Regularly rotate API keys
-4. Revoke compromised keys immediately
+1. **Minimize Data Collection**: Only collect data that is absolutely necessary
+2. **Data Retention Policies**: Implement clear policies for data retention and deletion
+3. **Access Controls**: Implement strict access controls for sensitive data
+4. **Regular Audits**: Conduct regular security audits and penetration testing
+5. **Incident Response**: Have a plan for responding to security incidents
 
-### 3. Monitoring
+### For Privacy Preservation
 
-1. Regularly check `security.log` for suspicious activity
-2. Set up alerts for security events
-3. Monitor rate limiting logs
-4. Audit API key usage
+1. **Differential Privacy Budgeting**: Carefully manage epsilon budgets across queries
+2. **Data Minimization**: Apply differential privacy to aggregated statistics only
+3. **User Consent**: Obtain proper consent for data processing activities
+4. **Transparency**: Be transparent about data processing and privacy measures
+5. **Privacy Impact Assessments**: Conduct assessments for new features
 
-## Security Testing
+## Conclusion
 
-The server includes automated security tests in `security_tests.py` that verify:
-- Rate limiting functionality
-- XSS detection
-- SQL injection detection
-
-Run security tests with:
-```bash
-make security-test
-```
-
-## Vulnerability Reporting
-
-If you discover a security vulnerability, please:
-1. Do not publicly disclose the issue
-2. Contact the maintainers directly
-3. Provide detailed information about the vulnerability
-4. Allow time for a fix before public disclosure
-
-## Compliance
-
-The Nexus HTTP Server helps with compliance requirements for:
-- GDPR (data protection)
-- HIPAA (healthcare data)
-- PCI DSS (payment data)
-- And other regulatory frameworks
-
-Note: Compliance requires proper configuration and usage of the server.
+Nexus HTTP Server provides a comprehensive suite of security and privacy features designed to protect both traditional security concerns and modern privacy requirements. The implementation of end-to-end encryption and differential privacy makes it suitable for applications that require strong privacy guarantees while maintaining usability.

@@ -120,6 +120,84 @@ Echo back validated JSON data.
 }
 ```
 
+### Privacy-Preserving Endpoints
+
+#### POST /api/encrypt
+Encrypt data with end-to-end encryption.
+
+**Request Body:**
+```json
+{
+  "data": "string",
+  "password": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "encrypted_data": "string",
+  "salt": "string"
+}
+```
+
+#### POST /api/decrypt
+Decrypt data with end-to-end encryption.
+
+**Request Body:**
+```json
+{
+  "encrypted_data": "string",
+  "salt": "string",
+  "password": "string"
+}
+```
+
+**Response:**
+```json
+{
+  "decrypted_data": "string"
+}
+```
+
+#### POST /api/dp/count
+Get a differentially private count of items.
+
+**Request Body:**
+```json
+{
+  "values": "array",
+  "epsilon": "number"
+}
+```
+
+**Response:**
+```json
+{
+  "noisy_count": "number",
+  "epsilon": "number"
+}
+```
+
+#### POST /api/dp/mean
+Get a differentially private mean of values.
+
+**Request Body:**
+```json
+{
+  "values": "array of numbers",
+  "epsilon": "number"
+}
+```
+
+**Response:**
+```json
+{
+  "noisy_mean": "number",
+  "epsilon": "number"
+}
+```
+
 ### API Key Management
 
 #### POST /api/admin/api-keys

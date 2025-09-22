@@ -12,8 +12,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gemini-http-server.git
-cd gemini-http-server
+git clone https://github.com/your-username/nexus-http-server.git
+cd nexus-http-server
 ```
 
 ### 2. Configure Environment Variables
@@ -45,7 +45,7 @@ docker-compose up -d
 Create an Nginx configuration file:
 
 ```nginx
-# /etc/nginx/sites-available/gemini-server
+# /etc/nginx/sites-available/nexus-server
 server {
     listen 80;
     server_name your-domain.com;
@@ -63,7 +63,7 @@ server {
 Enable the site:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/gemini-server /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/nexus-server /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -90,6 +90,28 @@ docker-compose down
 docker-compose up -d --build
 ```
 
+## Privacy-Preserving Features in Production
+
+When deploying to production, consider these privacy-preserving features:
+
+### End-to-End Encryption
+
+The server provides built-in encryption endpoints that can be used to protect sensitive data:
+
+- `/api/encrypt` - Encrypts data before storing or transmitting
+- `/api/decrypt` - Decrypts data when needed
+
+These endpoints use industry-standard AES-256 encryption with PBKDF2 key derivation.
+
+### Differential Privacy
+
+For applications that perform statistical analysis, the server provides differentially private endpoints:
+
+- `/api/dp/count` - Provides privacy-preserving counts
+- `/api/dp/mean` - Provides privacy-preserving means
+
+These endpoints add calibrated noise to protect individual privacy while preserving statistical accuracy.
+
 ## Scaling Considerations
 
 For high-traffic applications, consider:
@@ -99,3 +121,4 @@ For high-traffic applications, consider:
 3. Using a CDN for static assets
 4. Implementing database persistence
 5. Setting up automated backups
+6. Configuring proper rate limiting for privacy-preserving endpoints

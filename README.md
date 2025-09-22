@@ -65,6 +65,14 @@ Nexus offers developers a secure, batteries-included HTTP server that's perfect 
 *   `GET /api/logs`: Accesses server logs (development mode only).
 *   `POST /api/echo`: Demonstrates JSON input validation by echoing back a validated JSON payload.
 *   `POST /api/login`: JWT authentication endpoint.
+*   `POST /api/encrypt`: Encrypts data with end-to-end encryption.
+*   `POST /api/decrypt`: Decrypts data with end-to-end encryption.
+*   `POST /api/dp/count`: Differentially private count of items.
+*   `POST /api/dp/mean`: Differentially private mean calculation.
+*   `POST /api/encrypt`: Encrypts data with end-to-end encryption.
+*   `POST /api/decrypt`: Decrypts data with end-to-end encryption.
+*   `POST /api/dp/count`: Differentially private count of items.
+*   `POST /api/dp/mean`: Differentially private mean calculation.
 
 ## Quick Start
 
