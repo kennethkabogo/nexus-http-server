@@ -6,11 +6,14 @@ from unittest.mock import MagicMock, patch
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from main import (
-    error_middleware, authentication_middleware, security_headers_middleware,
-    rate_limit_middleware, security_monitoring_middleware, simple_middleware,
-    Request, Response
-)
+# Import directly from nexus_server modules
+from nexus_server.server import Request, Response
+from nexus_server.middleware.error import error_middleware
+from nexus_server.middleware.auth import authentication_middleware
+from nexus_server.middleware.security import security_headers_middleware
+from nexus_server.middleware.rate_limit import rate_limit_middleware
+from nexus_server.middleware.monitoring import security_monitoring_middleware
+from nexus_server.middleware.simple import simple_middleware
 
 class TestMiddleware(unittest.TestCase):
     """Test middleware functionality"""
@@ -67,7 +70,7 @@ class TestMiddleware(unittest.TestCase):
         self.assertIn('X-Custom-Header', header_names)
         self.assertEqual(response.body, 'Test response')
     
-    @patch('main.is_suspicious')
+    @patch('nexus_server.security.utils.is_suspicious')
     def test_security_monitoring_middleware_clean_request(self, mock_is_suspicious):
         """Test security monitoring middleware with clean request"""
         mock_is_suspicious.return_value = False
@@ -79,7 +82,7 @@ class TestMiddleware(unittest.TestCase):
         self.mock_handler.assert_called_once_with(self.mock_request)
         self.assertEqual(response.body, 'Test response')
     
-    @patch('main.is_suspicious')
+    @patch('nexus_server.security.utils.is_suspicious')
     def test_security_monitoring_middleware_suspicious_request(self, mock_is_suspicious):
         """Test security monitoring middleware with suspicious request"""
         mock_is_suspicious.return_value = True

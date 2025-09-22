@@ -9,11 +9,15 @@ from unittest.mock import patch, MagicMock
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from main import (
-    Request, Response, sanitize_recursive, sanitize_for_logging, 
-    is_suspicious, validate_json, routes, setup_routes,
+# Import directly from nexus_server modules
+from nexus_server.server import (
+    Request, Response, routes, setup_routes
+)
+from nexus_server.security.utils import (
+    sanitize_recursive, sanitize_for_logging, is_suspicious,
     generate_secure_token, generate_correlation_id
 )
+from nexus_server.utils.validation import validate_json
 
 class TestRequestParsing(unittest.TestCase):
     """Test request parsing functionality"""
