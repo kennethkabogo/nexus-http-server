@@ -1,5 +1,5 @@
 """
-Gemini HTTP Server - A lightweight, security-focused HTTP server with React frontend integration.
+Nexus HTTP Server - A lightweight, security-focused HTTP server with React frontend integration.
 
 This package provides:
 - A WSGI-compliant HTTP server
@@ -14,10 +14,10 @@ This package provides:
 """
 
 __version__ = "1.0.0"
-__author__ = "Kenneth Joroge"
-__email__ = "your-email@example.com"
+__author__ = "Kenneth Kabogo"
+__email__ = "kennethkabogo2@gmail.com"
 __license__ = "MIT"
-__url__ = "https://github.com/your-username/gemini-http-server"
+__url__ = "https://github.com/kennethkabogo/nexus-http-server"
 
 # Import main components for easy access
 from .server import create_app, route, middleware

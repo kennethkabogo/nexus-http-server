@@ -7,14 +7,14 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
 
 setup(
-    name="gemini-http-server",
+    name="nexus-http-server",
     version="1.0.0",
-    author="Kenneth Joroge",
-    author_email="your-email@example.com",
+    author="Kenneth Kabogo",
+    author_email="kennethkabogo2@gmail.com",
     description="A lightweight, security-focused HTTP server with React frontend integration",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/your-username/gemini-http-server",
+    url="https://github.com/kennethkabogo/nexus-http-server",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -35,11 +35,11 @@ setup(
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "gemini-server=gemini_server.main:main",
+            "nexus-server=nexus_server.main:main",
         ],
     },
     include_package_data=True,
     package_data={
-        "gemini_server": ["templates/*.html"],
+        "nexus_server": ["templates/*.html"],
     },
 )

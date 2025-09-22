@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Main entry point for the Gemini HTTP Server.
+Main entry point for the Nexus HTTP Server.
 """
 import os
 import logging
@@ -25,7 +25,7 @@ logging.basicConfig(
 
 
 def main():
-    """Main entry point for the Gemini HTTP Server."""
+    """Main entry point for the Nexus HTTP Server."""
     # Setup routes
     setup_routes()
     
@@ -50,8 +50,8 @@ def main():
     
     # Create and start the server
     httpd = make_server('', port, app)
-    logging.info("Starting Gemini HTTP Server on port %s", port)
-    print(f"Gemini HTTP Server running on http://localhost:{port}")
+    logging.info("Starting Nexus HTTP Server on port %s", port)
+    print(f"Nexus HTTP Server running on http://localhost:{port}")
     httpd.serve_forever()
 
 

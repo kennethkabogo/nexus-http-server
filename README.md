@@ -1,16 +1,16 @@
-# Gemini HTTP Server
+# Nexus HTTP Server
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/)
-[![Build Status](https://github.com/your-username/gemini-http-server/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/your-username/gemini-http-server/actions)
-[![codecov](https://codecov.io/gh/your-username/gemini-http-server/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/gemini-http-server)
+[![Build Status](https://github.com/your-username/nexus-http-server/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/your-username/nexus-http-server/actions)
+[![codecov](https://codecov.io/gh/your-username/nexus-http-server/branch/main/graph/badge.svg)](https://codecov.io/gh/your-username/nexus-http-server)
 [![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](docs/)
 
-A lightweight, security-focused HTTP server built with Python, designed to serve modern web applications with a React frontend. Gemini provides a production-ready foundation with built-in cybersecurity and data privacy features.
+A lightweight, security-focused HTTP server built with Python, designed to serve modern web applications with a React frontend. Nexus provides a production-ready foundation with built-in cybersecurity and data privacy features.
 
-## Why Gemini?
+## Why Nexus?
 
-Gemini offers developers a secure, batteries-included HTTP server that's perfect for:
+Nexus offers developers a secure, batteries-included HTTP server that's perfect for:
 - Rapid prototyping of web applications
 - Educational purposes (understanding HTTP servers and security)
 - Small to medium-scale production deployments
@@ -72,18 +72,18 @@ Gemini offers developers a secure, batteries-included HTTP server that's perfect
 
 ```bash
 # Install the package
-pip install gemini-http-server
+pip install nexus-http-server
 
 # Run the server
-gemini-server
+nexus-server
 ```
 
 ### From Source
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/gemini-http-server.git
-    cd gemini-http-server
+    git clone https://github.com/your-username/nexus-http-server.git
+    cd nexus-http-server
     ```
 
 2.  **Install dependencies:**
@@ -111,8 +111,8 @@ gemini-server
 docker-compose up --build
 
 # Or run with Docker directly
-docker build -t gemini-server .
-docker run -p 8000:8000 gemini-server
+docker build -t nexus-server .
+docker run -p 8000:8000 nexus-server
 ```
 
 ## Usage
@@ -173,7 +173,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Author
 
-[Kenneth Joroge](https://github.com/kennjoroge) - Initial work
+[Kenneth Kabogo](https://github.com/kennethkabogo) - Initial work
 
 ## Acknowledgments
 

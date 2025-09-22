@@ -14,8 +14,8 @@ This package provides:
 """
 
 __version__ = "1.0.0"
-__author__ = "Kenneth Joroge"
-__email__ = "your-email@example.com"
+__author__ = "Kenneth Kabogo"
+__email__ = "kennethkabogo2@gmail.com"
 __license__ = "MIT"
 __url__ = "https://github.com/your-username/gemini-http-server"
 
